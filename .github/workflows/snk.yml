@@ -1,0 +1,26 @@
+name: Generate Pacman graph
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # jalan tiap hari
+  workflow_dispatch:     # bisa dijalankan manual juga
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Generate the snake
+        uses: Platane/snk@v3
+        with:
+          github_user_name: Indhirayc
+          outputs: |
+            ./dist/pacman-contribution-graph.svg
+            ./dist/pacman-contribution-graph-dark.svg
+      - name: Push to output branch
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
